@@ -1,4 +1,9 @@
 {
+  "name": "Backpack Sketch Lint",
+  "description": "Lint your Sketch documents",
+  "author": "James Ferguson",
+  "homepage": "http://backpack.github.io",
+  "version": "1.0",
   "compatibleVersion": 3,
   "bundleVersion": 1,
   "commands": [
@@ -9,9 +14,8 @@
     }
   ],
   "menu": {
-    "title": "my-plugin",
     "items": [
-      "my-command-identifier"
+      "Font-size check"
     ]
   }
 }
