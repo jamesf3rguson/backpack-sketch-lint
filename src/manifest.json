@@ -8,8 +8,8 @@
   "bundleVersion": 1,
   "commands": [
     {
-      "name": "my-command",
-      "identifier": "my-command-identifier",
+      "name": "Backpack lint",
+      "identifier": "Backpack-lint",
       "script": "./my-command.js"
     }
   ],

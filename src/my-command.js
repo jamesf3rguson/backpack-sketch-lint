@@ -1,34 +1,42 @@
-export default function checkFontSize() {
+import { type } from './rules';
+
+const MARK_REGEX = /\[BPK:([A-Za-z,]+)\]/g;
+const buildLayerMarker = (violations) => `[BPK:${violations.join(',')}]`;
+
+export default function lint() {
   var sketch = context.api();
 
   if (context.selection.length === 0) {
-    sketch.selectedDocument.showMessage("No selection" );
+    context.document.showMessage("No selection" );
   } else {
-    fontSize(sketch.selectedDocument.selectedLayers);
+    run(sketch.selectedDocument.selectedLayers, [type]);
   }
 };
 
-function fontSize(selection) {
-  // declare permitted fontsizes
-  var permittedFontSizes = [12,16,24,28,42];
-
-  var anyViolation = false;
-
+const run = (selection, activeRules) => {
+  let anyViolation = false;
   selection.iterate((layer) => {
-    if (layer.isText) {
-      var permittedSize = permittedFontSizes.indexOf(layer.sketchObject.fontSize()) != -1;
+    const failedRules = [];
 
-      if (!permittedSize) {
+    activeRules.forEach((rule) => {
+      if (rule.relevantToLayer(layer) && !rule.isValid(layer)) {
         anyViolation = true;
-        layer.name = `*${layer.name}`
-      } else {
-        layer.deselect();
+        failedRules.push(rule);
       }
+    });
+
+    const name = layer.name.replace(MARK_REGEX, "");
+
+    if (failedRules.length > 0) {
+      const marker = buildLayerMarker(failedRules.map(rule => rule.identifier));
+      layer.name = `${marker}${name}`;
+    } else {
+      layer.name = name;
+      layer.deselect();
     }
   });
 
   if (anyViolation) {
-    context.document.showMessage("Uh oh. Wrong font sizes detected.");
-
+    context.document.showMessage("Uh oh. Backpack linting errors detected.");
   }
 };
