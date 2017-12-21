@@ -16,6 +16,7 @@
     "postinstall": "npm run build && skpm-link"
   },
   "devDependencies": {
-    "@skpm/builder": "^0.2.0"
+    "@skpm/builder": "^0.2.0",
+    "bpk-tokens": "^26.7.0"
   }
 }
